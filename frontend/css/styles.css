@@ -164,3 +164,21 @@ body{
 @media (prefers-reduced-motion: reduce){
   *{ animation-duration:.001s !important; animation-iteration-count:1 !important; }
 }
+
+/* ── drag & drop ────────────────────────────────────────────────────── */
+.block{ touch-action:none; cursor:grab; }
+.block:active{ cursor:grabbing; }
+.drag-ghost{ position:fixed; transform:translate(-50%,-50%) scale(1.06) rotate(-3deg); z-index:200;
+  pointer-events:none; opacity:.92; box-shadow:0 14px 30px -8px rgba(0,0,0,.5); }
+.stack.dragover{ outline:3px dashed #34d399; outline-offset:2px; background:#ecfdf5; }
+.loopbody.dragover{ outline:3px dashed #a855f7; outline-offset:2px; background:#f5f3ff; border-radius:.6rem; }
+.stack{ transition: background .15s, outline-color .15s; }
+
+/* wider, balanced game stage so it fills the screen (not a thin centered column) */
+@media (min-width:760px){
+  .game-wrap{ grid-template-columns: 1.15fr 1fr; gap:1.5rem; }
+}
+@media (min-width:1100px){
+  .game-wrap{ grid-template-columns: 1.2fr .9fr; }
+}
+.board{ width:100%; }

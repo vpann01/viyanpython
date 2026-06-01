@@ -219,7 +219,7 @@
   function showGameLesson(w, l) {
     state.lessonStart = Date.now();
     app.innerHTML = '';
-    const wrap = el(`<div class="max-w-3xl mx-auto p-3 pt-20 pb-6"></div>`);
+    const wrap = el(`<div class="max-w-5xl mx-auto p-3 pt-20 pb-6"></div>`);
     const back = el(`<button class="text-sky-600 mb-2 font-bold text-lg">← ${escapeHtml(w.name)}</button>`);
     back.onclick = () => showWorld(w);
     wrap.appendChild(back);

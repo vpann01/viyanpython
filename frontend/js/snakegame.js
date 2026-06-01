@@ -117,7 +117,7 @@ _snap('start')
     let cell = 56;
     function drawBoard(r, c, dir, got) {
       const W = boardEl.clientWidth || 320;
-      cell = Math.max(40, Math.min(64, Math.floor((W - 8) / cfg.cols)));
+      cell = Math.max(44, Math.min(78, Math.floor((W - 8) / cfg.cols)));
       boardEl.style.height = cfg.rows * cell + 'px';
       let cells = '';
       for (let i = 0; i < cfg.rows; i++) for (let j = 0; j < cfg.cols; j++) {
@@ -137,28 +137,59 @@ _snap('start')
     cfg._gemsLeft = (cfg.gems || []).slice();
     drawBoard(cfg.start[0], cfg.start[1], cfg.dir || 'E', 0);
 
-    // palette
+    // palette — each block supports BOTH tap-to-add and drag-and-drop (touch friendly)
     const pal = host.querySelector('#palette');
     (cfg.blocks || ['move_forward']).forEach((b) => {
-      if (b === 'loop') {
-        const btn = el(`<button class="block block-loop">🔁 Repeat</button>`);
-        btn.onclick = () => { Sfx.tap(); addLoop(); };
-        pal.appendChild(btn);
-      } else {
-        const btn = el(`<button class="block">${ICON[b] || b}</button>`);
-        btn.onclick = () => { Sfx.tap(); addCmd(b); };
-        pal.appendChild(btn);
-      }
+      const isLoop = b === 'loop';
+      const btn = el(`<button class="block ${isLoop ? 'block-loop' : ''}">${isLoop ? '🔁 Repeat' : (ICON[b] || b)}</button>`);
+      makeDraggable(btn, b, isLoop);
+      pal.appendChild(btn);
     });
 
-    function addCmd(code) {
-      const target = selectedLoop ? selectedLoop.body : model;
-      target.push({ t: 'cmd', code });
+    function addBlock(kind, isLoop, body) {
+      if (isLoop) { const loop = { t: 'loop', n: 3, body: [] }; model.push(loop); selectedLoop = loop; }
+      else { (body || (selectedLoop ? selectedLoop.body : model)).push({ t: 'cmd', code: kind }); }
       render();
     }
-    function addLoop() {
-      const loop = { t: 'loop', n: 3, body: [] };
-      model.push(loop); selectedLoop = loop; render();
+
+    function dropBodyAt(x, y) {
+      const e0 = document.elementFromPoint(x, y);
+      const lb = e0 && e0.closest && e0.closest('.loopbody');
+      if (lb) { const box = lb.closest('.loopbox'); const i = +box.dataset.loopI; if (model[i] && model[i].t === 'loop') return model[i].body; }
+      return null; // → top-level model
+    }
+
+    function makeDraggable(btn, kind, isLoop) {
+      let down = false, moved = false, sx = 0, sy = 0, ghost = null;
+      btn.style.touchAction = 'none';
+      btn.addEventListener('pointerdown', (e) => { down = true; moved = false; sx = e.clientX; sy = e.clientY; try { btn.setPointerCapture(e.pointerId); } catch {} });
+      btn.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        if (!moved && Math.hypot(e.clientX - sx, e.clientY - sy) > 8) {
+          moved = true;
+          ghost = btn.cloneNode(true); ghost.className += ' drag-ghost'; document.body.appendChild(ghost);
+        }
+        if (moved && ghost) {
+          ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px';
+          host.querySelectorAll('.dragover').forEach((n) => n.classList.remove('dragover'));
+          const e0 = document.elementFromPoint(e.clientX, e.clientY);
+          const zone = e0 && e0.closest && (e0.closest('.loopbody') || (e0.closest('#stack')));
+          if (zone) zone.classList.add('dragover');
+        }
+      });
+      const finish = (e) => {
+        if (!down) return; down = false;
+        host.querySelectorAll('.dragover').forEach((n) => n.classList.remove('dragover'));
+        if (moved) {
+          const body = (e ? dropBodyAt(e.clientX, e.clientY) : null);
+          if (isLoop) addBlock(kind, true);          // loops stay top-level
+          else addBlock(kind, false, body || model);
+          if (ghost) { ghost.remove(); ghost = null; }
+          Sfx.step();
+        } else { addBlock(kind, isLoop); Sfx.tap(); }  // simple tap
+      };
+      btn.addEventListener('pointerup', finish);
+      btn.addEventListener('pointercancel', () => { down = false; if (ghost) { ghost.remove(); ghost = null; } host.querySelectorAll('.dragover').forEach((n) => n.classList.remove('dragover')); });
     }
 
     function render() {
@@ -175,6 +206,7 @@ _snap('start')
               <div class="loophead">🔁 Repeat <button class="minus">−</button><b>${s.n}</b><button class="plus">+</button> times
                 <button class="x">✕</button></div>
               <div class="loopbody"></div></div>`);
+            box.dataset.loopI = i;
             box.querySelector('.plus').onclick = (e) => { e.stopPropagation(); s.n = Math.min(9, s.n + 1); render(); };
             box.querySelector('.minus').onclick = (e) => { e.stopPropagation(); s.n = Math.max(1, s.n - 1); render(); };
             box.querySelector('.x').onclick = (e) => { e.stopPropagation(); model.splice(i, 1); if (selectedLoop === s) selectedLoop = null; render(); };
@@ -185,7 +217,7 @@ _snap('start')
           }
         });
       };
-      if (!model.length) stackEl.innerHTML = '<span class="hint">👇 Tap blocks below to build your code!</span>';
+      if (!model.length) stackEl.innerHTML = '<span class="hint">👇 Tap a block — or drag it up here — to build your code!</span>';
       else renderList(model, stackEl, null);
       pyEl.textContent = toPython(model);
     }
