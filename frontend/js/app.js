@@ -51,17 +51,19 @@
     const card = el(`
       <div class="min-h-screen grid place-items-center p-4">
         <div class="pop-in w-full max-w-md bg-white rounded-3xl shadow-xl p-7 text-center">
-          <div class="text-6xl floaty">🐍</div>
-          <h1 class="text-3xl font-extrabold mt-2">Py<span class="text-emerald-500">Quest</span></h1>
-          <p class="text-slate-500 mb-5">Learn Python by playing an adventure!</p>
-          <input id="u" placeholder="username or email" class="w-full mb-2 px-4 py-3 rounded-xl bg-slate-100 outline-none" />
-          <input id="p" type="password" placeholder="password" class="w-full mb-3 px-4 py-3 rounded-xl bg-slate-100 outline-none" />
-          <button id="go" class="btn btn-primary w-full mb-2">Start Playing ▶</button>
-          <button id="reg" class="text-sm text-sky-600 underline">New here? Create a hero</button>
+          <div class="text-7xl floaty">🐍</div>
+          <h1 class="text-4xl font-extrabold mt-2">Py<span class="text-emerald-500">Quest</span></h1>
+          <p class="text-slate-500 mb-4 text-lg">Code your snake to the apple! 🍎</p>
+          <button id="play" class="btn btn-primary w-full mb-3 text-2xl py-4">▶ JUST PLAY!</button>
+          <details class="text-left">
+            <summary class="text-sm text-slate-400 cursor-pointer text-center mb-2">I have an account</summary>
+            <input id="u" placeholder="username or email" class="w-full mb-2 px-4 py-3 rounded-xl bg-slate-100 outline-none" />
+            <input id="p" type="password" placeholder="password" class="w-full mb-2 px-4 py-3 rounded-xl bg-slate-100 outline-none" />
+            <button id="go" class="btn btn-sky w-full mb-2">Log in</button>
+            <button id="reg" class="text-sm text-sky-600 underline w-full">New here? Create a hero</button>
+            <div class="text-xs text-slate-400 mt-2">Demo: <b>kid@pythonquest.ai</b> / <b>Kid123!</b></div>
+          </details>
           <p id="err" class="text-rose-500 text-sm mt-2 h-5"></p>
-          <div class="text-xs text-slate-400 mt-3 leading-relaxed">
-            Try demo: <b>kid@pythonquest.ai</b> / <b>Kid123!</b>
-          </div>
         </div>
       </div>`);
     app.appendChild(card);
@@ -70,6 +72,14 @@
       err.textContent = '';
       try {
         const r = await API.login($('#u', card).value.trim(), $('#p', card).value);
+        API.setToken(r.token); await refresh(); showMap();
+      } catch (e) { err.textContent = '😿 ' + e.message; }
+    };
+    $('#play', card).onclick = async () => {
+      err.textContent = '';
+      const guest = 'hero' + Date.now().toString(36) + Math.floor(Math.random() * 999);
+      try {
+        const r = await API.register(guest, guest + 'pw', 'Hero');
         API.setToken(r.token); await refresh(); showMap();
       } catch (e) { err.textContent = '😿 ' + e.message; }
     };
@@ -155,6 +165,7 @@
 
   // ── lesson (the learning loop) ────────────────────────────────────────────
   function showLesson(w, l) {
+    if (l.game) return showGameLesson(w, l);
     state.lessonStart = Date.now();
     let attempts = 0, quizDone = false, codeDone = !l.playground;
     app.innerHTML = '';
@@ -163,14 +174,19 @@
     $('button', wrap).onclick = () => showWorld(w);
 
     // 1) story  2) explain  3) example  4) playground  5) quiz  6) reward
-    wrap.appendChild(el(`
+    const storyText = (l.story || '').replace(/[*`]/g, '');
+    const storyCard = el(`
       <div class="pop-in bg-white rounded-3xl p-5 shadow mb-4">
-        <h2 class="text-xl font-extrabold mb-2">${l.boss?'🐉 ':'📖 '}${escapeHtml(l.title)}</h2>
+        <h2 class="text-xl font-extrabold mb-2 flex items-center gap-2">${l.boss?'🐉 ':'📖 '}${escapeHtml(l.title)}
+          <button id="narrate" class="text-lg ml-auto">🔊</button></h2>
         <div class="bg-amber-50 border-l-4 border-amber-300 rounded-r-xl p-3 text-slate-700">${md(l.story)}</div>
         <div class="mt-3 space-y-1 text-slate-700">${(l.explain||[]).map(e=>`<div>• ${md(e)}</div>`).join('')}</div>
         ${l.example?`<div class="mt-3"><div class="text-xs font-bold text-slate-400 mb-1">EXAMPLE</div>
           <pre class="console"><code>${escapeHtml(l.example)}</code></pre></div>`:''}
-      </div>`));
+      </div>`);
+    wrap.appendChild(storyCard);
+    $('#narrate', storyCard).onclick = () => SnakeGame.say(storyText);
+    setTimeout(() => SnakeGame.say(storyText), 400);
 
     // playground
     if (l.playground) wrap.appendChild(buildPlayground(l, () => { codeDone = true; tryFinish(); }, (n)=>attempts=n));
@@ -194,8 +210,34 @@
       const before = state.progress.total_xp;
       state.progress = await API.complete(l.id, stars, secs);
       updateHud();
-      celebrate(l, state.progress.total_xp - before, stars);
+      celebrate(w, l, state.progress.total_xp - before, stars);
     };
+  }
+
+  // ── game lesson (Code Island: tap-to-code the snake) ───────────────────────
+  function showGameLesson(w, l) {
+    state.lessonStart = Date.now();
+    app.innerHTML = '';
+    const wrap = el(`<div class="max-w-3xl mx-auto p-3 pt-20 pb-6"></div>`);
+    const back = el(`<button class="text-sky-600 mb-2 font-bold text-lg">← ${escapeHtml(w.name)}</button>`);
+    back.onclick = () => showWorld(w);
+    wrap.appendChild(back);
+    wrap.appendChild(el(`<h2 class="text-2xl font-extrabold mb-2">${l.boss ? '🐉 ' : '🎮 '}${escapeHtml(l.title)}</h2>`));
+    const host = el(`<div class="bg-white rounded-3xl p-3 sm:p-4 shadow"></div>`);
+    wrap.appendChild(host);
+    app.appendChild(wrap);
+
+    let solved = false;
+    SnakeGame.mount(host, JSON.parse(JSON.stringify(l.game)), {
+      onWin: async () => {
+        if (solved) return; solved = true;
+        const secs = Math.round((Date.now() - state.lessonStart) / 1000);
+        const before = state.progress.total_xp;
+        state.progress = await API.complete(l.id, 3, secs);
+        updateHud();
+        celebrate(w, l, state.progress.total_xp - before, 3);
+      },
+    });
   }
 
   function buildPlayground(l, onSolved, setAttempts) {
@@ -274,18 +316,24 @@
   }
 
   // ── celebration / rewards ───────────────────────────────────────────────────
-  function celebrate(l, gainedXp, stars) {
+  function celebrate(w, l, gainedXp, stars) {
     confettiBurst();
+    try { SnakeGame.say('Awesome! You earned a badge!'); } catch {}
     const r = l.reward || {};
+    const learned = (l.game && l.game.concept) || (l.explain && l.explain[0]) || '';
+    const lessons = w.lessons || [];
+    const idx = lessons.findIndex((x) => x.id === l.id);
+    const next = lessons[idx + 1];
     const modal = el(`<div class="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4">
       <div class="pop-in bg-white rounded-3xl p-7 text-center max-w-sm w-full">
-        <div class="text-6xl floaty">${r.emoji || '🎉'}</div>
-        <h2 class="text-2xl font-extrabold mt-2">Mission Complete!</h2>
-        <div class="text-amber-500 text-2xl my-1">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
-        <p class="text-slate-600">+${gainedXp} XP${r.badge?` · Badge unlocked: <b>${escapeHtml(r.badge)}</b>`:''}</p>
-        <button class="btn btn-primary w-full mt-4">Keep going ▶</button>
+        <div class="text-7xl floaty">${r.emoji || '🎉'}</div>
+        <h2 class="text-2xl font-extrabold mt-2">${l.boss ? 'Boss Defeated!' : 'You did it!'}</h2>
+        <div class="text-amber-500 text-3xl my-1">${'⭐'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+        <p class="text-slate-600 mb-1">+${gainedXp} XP${r.badge ? ` · 🏅 <b>${escapeHtml(r.badge)}</b>` : ''}</p>
+        ${learned ? `<div class="bg-emerald-50 text-emerald-800 rounded-xl p-2 text-sm mt-2">🧠 You learned: ${md(learned)}</div>` : ''}
+        <button id="next" class="btn btn-primary w-full mt-4 text-lg">${next ? 'Next mission ▶' : 'Back to map 🗺️'}</button>
       </div></div>`);
-    $('button', modal).onclick = () => { modal.remove(); showMap(); };
+    $('#next', modal).onclick = () => { modal.remove(); next ? showLesson(w, next) : showMap(); };
     document.body.appendChild(modal);
   }
 

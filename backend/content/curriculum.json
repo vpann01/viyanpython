@@ -6,11 +6,79 @@
     "age_range": "8-14"
   },
   "levels": [
-    { "id": "L1", "name": "Beginner Hero",   "color": "#34d399", "worlds": ["w1", "w2", "w3", "w4"] },
+    { "id": "L1", "name": "Beginner Hero",   "color": "#34d399", "worlds": ["w0", "w1", "w2", "w3", "w4"] },
     { "id": "L2", "name": "Python Explorer", "color": "#60a5fa", "worlds": ["w5", "w6"] },
     { "id": "L3", "name": "Python Master",   "color": "#a78bfa", "worlds": ["w7", "w8"] }
   ],
   "worlds": [
+    {
+      "id": "w0",
+      "name": "Code Island",
+      "level": "L1",
+      "emoji": "🏝️",
+      "color": "#fb923c",
+      "blurb": "Tap blocks to walk Py the snake to the apple! Your very first code — no typing!",
+      "topics": ["Commands", "Sequences", "Loops (repeat)", "Turning"],
+      "lessons": [
+        {
+          "id": "w0l1",
+          "title": "First Steps 🐾",
+          "xp": 40,
+          "game": {
+            "rows": 5, "cols": 6, "start": [2, 0], "dir": "E", "goal": [2, 3],
+            "walls": [], "gems": [],
+            "blocks": ["move_forward", "turn_left", "turn_right"],
+            "teach": "Tap ⬆️ Move to make Py walk. Get to the apple! 🍎",
+            "say": "Hi! I am Py the snake! Tap the Move block to make me walk. Get me to the yummy apple!",
+            "concept": "A program is a list of steps. Each move_forward() makes Py walk one square."
+          },
+          "reward": { "badge": "First Steps", "emoji": "🐾" }
+        },
+        {
+          "id": "w0l2",
+          "title": "The Long Bridge 🌉",
+          "xp": 60,
+          "game": {
+            "rows": 5, "cols": 6, "start": [2, 0], "dir": "E", "goal": [2, 5],
+            "walls": [], "gems": [],
+            "blocks": ["move_forward", "loop"],
+            "teach": "5 whole steps! Tapping Move 5 times is boring... try the magic 🔁 Repeat block!",
+            "say": "Wow, the bridge is long! Tapping move five times is so much work. Try the Repeat block to do it the easy way!",
+            "concept": "A loop repeats steps for you. for i in range(5): move_forward() walks 5 squares with ONE block!"
+          },
+          "reward": { "badge": "Loop Wizard", "emoji": "🔁" }
+        },
+        {
+          "id": "w0l3",
+          "title": "Around the Corner ↩️",
+          "xp": 70,
+          "game": {
+            "rows": 5, "cols": 6, "start": [4, 1], "dir": "E", "goal": [1, 3],
+            "walls": [[4, 4], [3, 1], [2, 1]], "gems": [],
+            "blocks": ["move_forward", "turn_left", "turn_right", "loop"],
+            "teach": "Py needs to turn! Use ↩️ Left or ↪️ Right to change direction, then Move.",
+            "say": "Uh oh, the path turns! Use a turn block to spin me, then move. You can do it!",
+            "concept": "turn_left() and turn_right() change which way Py faces before moving."
+          },
+          "reward": { "badge": "Corner Master", "emoji": "🧭" }
+        },
+        {
+          "id": "w0l4",
+          "title": "Gem Rush 💎 (Boss)",
+          "xp": 120,
+          "boss": true,
+          "game": {
+            "rows": 5, "cols": 6, "start": [4, 0], "dir": "E", "goal": [4, 5],
+            "walls": [], "gems": [[4, 1], [4, 2], [4, 3], [4, 4]],
+            "blocks": ["move_forward", "turn_left", "turn_right", "loop"],
+            "teach": "Grab ALL the 💎 gems AND reach the 🍎! A 🔁 Repeat block makes it easy.",
+            "say": "Boss time! Slither across and grab every shiny gem, then reach the apple. Try a Repeat block!",
+            "concept": "Loops shine when you repeat the same move many times. You collected gems automatically by walking over them!"
+          },
+          "reward": { "badge": "Code Island Champion", "emoji": "🏆" }
+        }
+      ]
+    },
     {
       "id": "w1",
       "name": "Python Village",
