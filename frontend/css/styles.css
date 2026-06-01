@@ -1,0 +1,42 @@
+/* PyQuest theme — bright, cartoony, mobile-first, accessible */
+:root { --pop: cubic-bezier(.34,1.56,.64,1); }
+
+html { -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Baloo 2', system-ui, sans-serif; }
+/* Dyslexia-friendly mode: switch to Lexend + extra spacing */
+body[data-dyslexia="on"] { font-family: 'Lexend', system-ui, sans-serif; letter-spacing: .03em; word-spacing: .12em; line-height: 1.7; }
+
+/* big friendly tap targets */
+.btn { min-height: 48px; border-radius: 1rem; font-weight: 800; transition: transform .12s var(--pop), box-shadow .12s; }
+.btn:active { transform: scale(.95); }
+.btn-primary { background: linear-gradient(180deg,#34d399,#10b981); color:#063; box-shadow:0 5px 0 #059669; }
+.btn-primary:active { box-shadow:0 2px 0 #059669; }
+.btn-sky { background: linear-gradient(180deg,#60a5fa,#3b82f6); color:#fff; box-shadow:0 5px 0 #2563eb; }
+
+/* world map nodes */
+.world-node { transition: transform .2s var(--pop); }
+.world-node:hover { transform: translateY(-6px) scale(1.03); }
+.locked { filter: grayscale(.8) opacity(.65); }
+
+/* bounce-in */
+@keyframes pop-in { 0%{transform:scale(.6);opacity:0} 100%{transform:scale(1);opacity:1} }
+.pop-in { animation: pop-in .4s var(--pop) both; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.floaty { animation: float 3s ease-in-out infinite; }
+
+/* confetti bits */
+.confetti-bit { position:absolute; width:10px; height:14px; top:-20px; border-radius:2px;
+  animation: fall 1.6s linear forwards; }
+@keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity:.9; } }
+
+/* editor sizing */
+.CodeMirror { height: 220px; border-radius: .75rem; font-size: 15px; }
+@media (min-width:768px){ .CodeMirror { height: 300px; } }
+
+/* output console */
+.console { background:#0f172a; color:#a7f3d0; font-family: ui-monospace, Menlo, monospace;
+  border-radius:.75rem; padding:.75rem; min-height:64px; white-space:pre-wrap; font-size:14px; }
+.console .err { color:#fca5a5; }
+
+/* step pills */
+.step-pill { width:30px;height:30px;border-radius:9999px;display:grid;place-items:center;font-size:14px;font-weight:800; }

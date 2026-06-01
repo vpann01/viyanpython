@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "title": "PyQuest — Learn Python by Playing",
+    "tagline": "Minecraft x Duolingo x Khan Academy, for Python",
+    "version": "0.1.0",
+    "age_range": "8-14"
+  },
+  "levels": [
+    { "id": "L1", "name": "Beginner Hero",   "color": "#34d399", "worlds": ["w1", "w2", "w3", "w4"] },
+    { "id": "L2", "name": "Python Explorer", "color": "#60a5fa", "worlds": ["w5", "w6"] },
+    { "id": "L3", "name": "Python Master",   "color": "#a78bfa", "worlds": ["w7", "w8"] }
+  ],
+  "worlds": [
+    {
+      "id": "w1",
+      "name": "Python Village",
+      "level": "L1",
+      "emoji": "🏡",
+      "color": "#34d399",
+      "blurb": "A cozy village where you meet Py the snake and learn to store treasures in variables.",
+      "topics": ["Variables", "Data Types", "Strings", "Numbers", "Booleans", "print()", "input()"],
+      "lessons": [
+        {
+          "id": "w1l1",
+          "title": "The Treasure Chests (Variables)",
+          "xp": 50,
+          "story": "Py the snake found three magic chests! Each chest can hold ONE treasure and has a name written on it. In Python, a chest is called a *variable*. You put a treasure inside with the = sign.",
+          "explain": [
+            "A **variable** is a labeled box that stores a value.",
+            "You create one like this:  `gold = 100`",
+            "The name is on the left, the value is on the right, `=` puts it in.",
+            "You can look inside any time by printing it:  `print(gold)`"
+          ],
+          "example": "gold = 100\nhero = \"Py\"\nprint(hero)\nprint(gold)",
+          "playground": {
+            "prompt": "Make a variable called `score` equal to 7, then print it.",
+            "starter": "# put 7 into a chest named score\n\n",
+            "expected_stdout": "7",
+            "check": "score"
+          },
+          "quiz": [
+            {
+              "q": "Which line stores the number 5 in a box named coins?",
+              "options": ["coins = 5", "5 = coins", "coins == 5", "box coins 5"],
+              "answer": 0,
+              "hint": "The name goes on the LEFT of the = sign."
+            },
+            {
+              "q": "How do you show the value of coins on screen?",
+              "options": ["show(coins)", "print(coins)", "say coins", "echo coins"],
+              "answer": 1,
+              "hint": "Python uses a friendly word that means 'put on screen'."
+            }
+          ],
+          "reward": { "badge": "Chest Keeper", "emoji": "🧰" }
+        },
+        {
+          "id": "w1l2",
+          "title": "Words & Numbers (Data Types)",
+          "xp": 60,
+          "story": "Some chests hold NUMBERS (like coins) and some hold WORDS (like names). Py learns that Python treats them differently — you can add numbers, and you can glue words together!",
+          "explain": [
+            "**Numbers**: `42`, `3.14`  — you can do math with them.",
+            "**Strings** (words): `\"hello\"` — always wrapped in quotes.",
+            "**Booleans**: `True` or `False` — yes/no answers.",
+            "Glue strings with +:  `\"Py\" + \"thon\"` makes `\"Python\"`."
+          ],
+          "example": "name = \"Py\"\nlevel = 3\nbrave = True\nprint(name + \" the snake\")\nprint(level + 1)",
+          "playground": {
+            "prompt": "Create name = \"Mia\" and age = 9, then print:  Mia is 9   (hint: use str(age) to glue a number to words).",
+            "starter": "name = \"Mia\"\nage = 9\n# print:  Mia is 9\n",
+            "expected_stdout": "Mia is 9",
+            "check": "Mia is 9"
+          },
+          "quiz": [
+            {
+              "q": "Which one is a string?",
+              "options": ["42", "True", "\"cat\"", "3.14"],
+              "answer": 2,
+              "hint": "Strings always wear quote-mark hats."
+            },
+            {
+              "q": "What is True or False called in Python?",
+              "options": ["a number", "a boolean", "a string", "a list"],
+              "answer": 1,
+              "hint": "It starts with 'b' and means yes/no."
+            }
+          ],
+          "reward": { "badge": "Type Tamer", "emoji": "🏷️" }
+        },
+        {
+          "id": "w1l3",
+          "title": "Boss Battle: The Greeting Gate 🐉",
+          "xp": 100,
+          "boss": true,
+          "story": "A friendly dragon guards the village gate. To pass, you must teach the gate to greet ANY hero by name and tell them their starting score!",
+          "explain": [
+            "Combine everything: variables, strings, numbers, and print().",
+            "Use str() to put a number inside a sentence."
+          ],
+          "example": "hero = \"Sam\"\nscore = 0\nprint(\"Welcome \" + hero + \"! Score: \" + str(score))",
+          "playground": {
+            "prompt": "Set hero = \"Leo\" and score = 10. Print exactly:  Welcome Leo! Score: 10",
+            "starter": "hero = \"Leo\"\nscore = 10\n# print the greeting\n",
+            "expected_stdout": "Welcome Leo! Score: 10",
+            "check": "Welcome Leo! Score: 10"
+          },
+          "quiz": [
+            {
+              "q": "Why do we use str(score)?",
+              "options": ["To make it bigger", "To glue a number into a word sentence", "To delete it", "To make it secret"],
+              "answer": 1,
+              "hint": "You can't glue a number directly to words with +."
+            }
+          ],
+          "reward": { "badge": "Gate Breaker", "emoji": "🐉" }
+        }
+      ]
+    },
+    {
+      "id": "w2",
+      "name": "Decision Caves",
+      "level": "L1",
+      "emoji": "🕳️",
+      "color": "#22d3ee",
+      "blurb": "Dark caves with forking paths. Choose wisely using if / elif / else.",
+      "topics": ["Comparison Operators", "Logical Operators", "if", "elif", "else", "Boolean logic"],
+      "lessons": [
+        {
+          "id": "w2l1",
+          "title": "Which Path? (if / else)",
+          "xp": 70,
+          "story": "Two tunnels! One has treasure, one has a sleeping bat. Py uses an `if` to decide which way to go based on a torch's brightness.",
+          "explain": [
+            "`if` runs code ONLY when something is True.",
+            "`else` runs when it's False.",
+            "Compare with `>`, `<`, `==` (equals), `!=` (not equal).",
+            "Don't forget the colon `:` and the indent (4 spaces)!"
+          ],
+          "example": "light = 8\nif light > 5:\n    print(\"Go left!\")\nelse:\n    print(\"Go right!\")",
+          "playground": {
+            "prompt": "Set coins = 3. If coins is greater than 5 print \"rich\", otherwise print \"keep going\".",
+            "starter": "coins = 3\n# if/else here\n",
+            "expected_stdout": "keep going",
+            "check": "keep going"
+          },
+          "quiz": [
+            { "q": "What does == mean?", "options": ["assign a value", "is equal to", "not equal", "add"], "answer": 1, "hint": "One = puts in, two == asks a question." }
+          ],
+          "reward": { "badge": "Path Finder", "emoji": "🔦" }
+        }
+      ]
+    },
+    {
+      "id": "w3",
+      "name": "Loop Mountain",
+      "level": "L1",
+      "emoji": "⛰️",
+      "color": "#f59e0b",
+      "blurb": "Climb the mountain by repeating magic steps with loops.",
+      "topics": ["for loops", "while loops", "range()", "nested loops", "break", "continue"],
+      "lessons": [
+        {
+          "id": "w3l1",
+          "title": "Magic Repeat (for loop)",
+          "xp": 80,
+          "story": "To climb the mountain, Py must shout 'step!' five times. Instead of typing it 5 times, a `for` loop does the repeating for you!",
+          "explain": [
+            "`for i in range(5):` repeats 5 times.",
+            "`range(5)` gives the numbers 0,1,2,3,4.",
+            "The indented lines are what gets repeated."
+          ],
+          "example": "for i in range(3):\n    print(\"step!\")",
+          "playground": {
+            "prompt": "Use a for loop to print the numbers 1, 2, 3 (each on its own line). Hint: range(1, 4).",
+            "starter": "# loop here\n",
+            "expected_stdout": "1\n2\n3",
+            "check": "1\n2\n3"
+          },
+          "quiz": [
+            { "q": "How many times does range(4) repeat?", "options": ["3", "4", "5", "forever"], "answer": 1, "hint": "range(4) = 0,1,2,3 — count them." }
+          ],
+          "reward": { "badge": "Loop Climber", "emoji": "🔁" }
+        }
+      ]
+    },
+    {
+      "id": "w4",
+      "name": "Function Castle",
+      "level": "L1",
+      "emoji": "🏰",
+      "color": "#ec4899",
+      "blurb": "Build magical machines (functions) that do a job whenever you call them.",
+      "topics": ["def", "parameters", "return", "scope", "calling functions"],
+      "lessons": [
+        {
+          "id": "w4l1",
+          "title": "Build a Machine (def)",
+          "xp": 90,
+          "story": "The castle wizard teaches Py to build a spell machine: write the spell once, then cast it anytime by name.",
+          "explain": [
+            "`def greet():` creates a function (a reusable machine).",
+            "Call it by writing its name with ():  `greet()`",
+            "Parameters are inputs:  `def greet(name):`",
+            "`return` sends an answer back out."
+          ],
+          "example": "def greet(name):\n    return \"Hi \" + name\n\nprint(greet(\"Py\"))",
+          "playground": {
+            "prompt": "Write a function double(n) that returns n times 2, then print double(5).",
+            "starter": "def double(n):\n    # return n * 2\n\nprint(double(5))",
+            "expected_stdout": "10",
+            "check": "10"
+          },
+          "quiz": [
+            { "q": "What keyword sends a value back from a function?", "options": ["send", "give", "return", "out"], "answer": 2, "hint": "It 'returns' the answer to you." }
+          ],
+          "reward": { "badge": "Machine Maker", "emoji": "⚙️" }
+        }
+      ]
+    },
+    {
+      "id": "w5",
+      "name": "Data Forest",
+      "level": "L2",
+      "emoji": "🌲",
+      "color": "#10b981",
+      "blurb": "A forest of collections: lists, tuples, dictionaries and sets.",
+      "topics": ["Lists", "List methods", "Tuples", "Dictionaries", "Dict methods", "Sets", "Iteration", "Comprehensions"],
+      "lessons": [
+        {
+          "id": "w5l1",
+          "title": "The Backpack (Lists)",
+          "xp": 100,
+          "story": "Py's backpack holds many items in order. A Python list is exactly that — a backpack you can add to, take from, and count.",
+          "explain": [
+            "A list holds many values:  `bag = [\"apple\", \"rope\", \"key\"]`",
+            "Get the first item with `bag[0]` (counting starts at 0!).",
+            "Add with `bag.append(\"map\")`.",
+            "Count with `len(bag)`."
+          ],
+          "example": "bag = [\"apple\", \"rope\"]\nbag.append(\"key\")\nprint(bag[0])\nprint(len(bag))",
+          "playground": {
+            "prompt": "Make a list nums = [10, 20, 30] and print the LAST item using nums[-1].",
+            "starter": "nums = [10, 20, 30]\n# print the last item\n",
+            "expected_stdout": "30",
+            "check": "30"
+          },
+          "quiz": [
+            { "q": "What is bag[0]?", "options": ["the last item", "the first item", "the length", "an error"], "answer": 1, "hint": "Lists start counting at 0." }
+          ],
+          "reward": { "badge": "Collector", "emoji": "🎒" }
+        }
+      ]
+    },
+    {
+      "id": "w6",
+      "name": "Class Kingdom",
+      "level": "L2",
+      "emoji": "👑",
+      "color": "#6366f1",
+      "blurb": "Design your own creatures with classes and objects (OOP).",
+      "topics": ["Classes", "Objects", "Constructors __init__", "Inheritance", "Polymorphism", "Encapsulation", "Dunder methods", "Exceptions", "Files (txt/json/csv)"],
+      "lessons": [
+        {
+          "id": "w6l1",
+          "title": "Create a Creature (Classes)",
+          "xp": 120,
+          "story": "In the Class Kingdom, Py learns to design a blueprint for creatures. One blueprint (class) can make many creatures (objects)!",
+          "explain": [
+            "A `class` is a blueprint.  `class Pet:`",
+            "`__init__` sets up each new pet with its own data.",
+            "`self` means 'this particular pet'.",
+            "Make an object:  `p = Pet(\"Rex\")`"
+          ],
+          "example": "class Pet:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return self.name + \" says hi!\"\n\np = Pet(\"Rex\")\nprint(p.speak())",
+          "playground": {
+            "prompt": "Make a class Hero with __init__(self, name) and a method shout(self) that returns name + \"!!!\". Create Hero(\"Zoe\") and print zoe.shout().",
+            "starter": "class Hero:\n    def __init__(self, name):\n        self.name = name\n    # def shout(self): ...\n\nzoe = Hero(\"Zoe\")\nprint(zoe.shout())",
+            "expected_stdout": "Zoe!!!",
+            "check": "Zoe!!!"
+          },
+          "quiz": [
+            { "q": "What does __init__ do?", "options": ["ends the program", "sets up a new object", "prints text", "makes a loop"], "answer": 1, "hint": "It 'initializes' each new object." }
+          ],
+          "reward": { "badge": "Creature Creator", "emoji": "🐲" }
+        }
+      ]
+    },
+    {
+      "id": "w7",
+      "name": "Async Nebula",
+      "level": "L3",
+      "emoji": "🌌",
+      "color": "#3b82f6",
+      "blurb": "Master advanced powers: decorators, generators, async, and testing.",
+      "topics": ["Decorators", "Closures", "Generators", "Iterators", "Lambda", "map/filter/reduce", "Threading", "Multiprocessing", "Asyncio", "async/await", "Unit testing", "Pytest", "Mocking"],
+      "lessons": [
+        {
+          "id": "w7l1",
+          "title": "Lazy Magic (Lambda & map)",
+          "xp": 140,
+          "story": "Out in the nebula, Py discovers tiny one-line spells called lambdas, and a power called map that casts a spell on every star at once.",
+          "explain": [
+            "A `lambda` is a tiny function:  `double = lambda x: x * 2`",
+            "`map` applies a function to every item:  `map(double, [1,2,3])`",
+            "Wrap with `list(...)` to see the result."
+          ],
+          "example": "double = lambda x: x * 2\nprint(list(map(double, [1, 2, 3])))",
+          "playground": {
+            "prompt": "Use map with a lambda to triple every number in [1, 2, 3]. Print the list.  Expected: [3, 6, 9]",
+            "starter": "nums = [1, 2, 3]\n# print(list(map(... , nums)))\n",
+            "expected_stdout": "[3, 6, 9]",
+            "check": "[3, 6, 9]"
+          },
+          "quiz": [
+            { "q": "What is a lambda?", "options": ["a loop", "a tiny one-line function", "a list", "a class"], "answer": 1, "hint": "It's a function with no name, written in one line." }
+          ],
+          "reward": { "badge": "Star Caster", "emoji": "✨" }
+        }
+      ]
+    },
+    {
+      "id": "w8",
+      "name": "Builder's Realm",
+      "level": "L3",
+      "emoji": "🛠️",
+      "color": "#8b5cf6",
+      "blurb": "Build real things: APIs, data structures, algorithms, and your final game.",
+      "topics": ["REST APIs", "FastAPI", "JSON processing", "SQLite", "Web scraping", "Data structures (stacks/queues/trees)", "Searching & Sorting", "Recursion", "Dynamic Programming (intro)", "AI/LLM APIs", "Capstone: Final Python Adventure"],
+      "lessons": [
+        {
+          "id": "w8l1",
+          "title": "Capstone: The Number Genie 🎰",
+          "xp": 200,
+          "boss": true,
+          "story": "Final challenge! Build a Number Guessing helper: the Genie thinks of 7. Write code that checks a guess and prints 'too low', 'too high', or 'correct!'.",
+          "explain": [
+            "Combine variables, comparison, and if/elif/else.",
+            "This is a real mini-project — the kind you can grow into a full game!"
+          ],
+          "example": "secret = 7\nguess = 5\nif guess < secret:\n    print(\"too low\")\nelif guess > secret:\n    print(\"too high\")\nelse:\n    print(\"correct!\")",
+          "playground": {
+            "prompt": "secret = 7. Set guess = 9. Print 'too high' (use if/elif/else like the example).",
+            "starter": "secret = 7\nguess = 9\n# if/elif/else\n",
+            "expected_stdout": "too high",
+            "check": "too high"
+          },
+          "quiz": [
+            { "q": "When do we use elif?", "options": ["to check another condition if the first was False", "to end the program", "to make a list", "to loop forever"], "answer": 0, "hint": "elif = 'else, if this other thing is true'." }
+          ],
+          "reward": { "badge": "Python Master", "emoji": "🏆" }
+        }
+      ]
+    }
+  ]
+}

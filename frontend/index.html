@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="description" content="PyQuest — learn Python by playing an adventure game. For kids 6-16." />
+  <title>PyQuest 🐍 — Learn Python by Playing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <!-- CodeMirror 5 (simple, no build) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/dracula.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/python/python.min.js"></script>
+  <!-- Pyodide: run Python in the browser (safe WASM sandbox) -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: {
+      game: ['Baloo 2', 'Comic Sans MS', 'system-ui', 'sans-serif'] } } } };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Lexend:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body class="font-game bg-sky-100 text-slate-800 min-h-screen" data-dyslexia="off">
+  <!-- floating mascot + HUD -->
+  <header id="hud" class="hidden fixed top-0 inset-x-0 z-40 px-3 py-2 bg-white/80 backdrop-blur shadow-md flex items-center gap-3">
+    <div class="text-2xl">🐍</div>
+    <div class="flex-1">
+      <div class="flex items-center gap-2 text-sm font-bold">
+        <span id="hud-name">Hero</span>
+        <span class="text-xs bg-emerald-200 text-emerald-900 rounded-full px-2 py-0.5">Lvl <span id="hud-level">1</span></span>
+        <span class="text-xs text-amber-600">⭐ <span id="hud-xp">0</span> XP</span>
+      </div>
+      <div class="h-2 bg-slate-200 rounded-full overflow-hidden mt-1">
+        <div id="hud-xpbar" class="h-full bg-gradient-to-r from-emerald-400 to-lime-400 transition-all" style="width:0%"></div>
+      </div>
+    </div>
+    <button id="btn-badges" class="text-xl" title="Your badges">🏅</button>
+    <button id="btn-a11y" class="text-base px-2 py-1 rounded-lg bg-slate-100" title="Dyslexia-friendly font">Aa</button>
+    <button id="btn-logout" class="text-xs px-2 py-1 rounded-lg bg-rose-100 text-rose-700">Exit</button>
+  </header>
+
+  <main id="app" class="pt-2"></main>
+
+  <!-- celebration layer -->
+  <div id="confetti" class="pointer-events-none fixed inset-0 z-50 hidden"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/playground.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
