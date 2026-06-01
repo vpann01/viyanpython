@@ -221,6 +221,8 @@ _snap('start')
           else if (f.a === 'move') Sfx.step();
           else if (f.a === 'crash') Sfx.crash();
           drawBoard(f.r, f.c, f.d, f.got);
+          const pyTok = boardEl.querySelector('#py');
+          if (pyTok && (f.a === 'move' || f.a === 'gem')) { pyTok.classList.add('hop'); setTimeout(() => pyTok.classList.remove('hop'), 300); }
           if (f.a === 'crash') { boardEl.classList.add('shake'); setTimeout(() => boardEl.classList.remove('shake'), 400); }
           i++; setTimeout(tick, 340);
         };

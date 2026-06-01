@@ -75,3 +75,92 @@ body[data-dyslexia="on"] { font-family: 'Lexend', system-ui, sans-serif; letter-
   padding:.7rem 1rem; font-weight:800; font-size:1.05rem; box-shadow:0 4px 0 #0284c7; min-height:52px; }
 .block:active { transform:translateY(3px); box-shadow:0 1px 0 #0284c7; }
 .block-loop { background:linear-gradient(180deg,#c084fc,#a855f7); box-shadow:0 4px 0 #7e22ce; }
+
+/* ════════════════════════════════════════════════════════════════════
+   CINEMATIC LAYER — studio-grade art direction & motion (12 principles)
+   ════════════════════════════════════════════════════════════════════ */
+:root{
+  --spring: cubic-bezier(.34,1.56,.64,1);     /* overshoot = squash/stretch feel */
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --ink:#1e2440;
+}
+/* deep, lit, painterly sky (art direction) */
+body{
+  background: radial-gradient(120% 90% at 50% -10%, #bae6fd 0%, #c7d2fe 38%, #ede9fe 70%, #fae8ff 100%) fixed;
+  color:var(--ink);
+}
+/* premium glass cards with rim-light + soft ground shadow */
+.bg-white{ backdrop-filter: blur(6px); }
+.shadow, .shadow-lg, .shadow-xl{
+  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 18px 40px -18px rgba(50,40,90,.45), 0 6px 14px -8px rgba(50,40,90,.3) !important;
+}
+.rounded-3xl{ border:1px solid rgba(255,255,255,.6); }
+
+/* motion library ---------------------------------------------------- */
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}75%{transform:rotate(7deg)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes sparkle{0%,100%{transform:scale(1) rotate(0);filter:brightness(1)}50%{transform:scale(1.25) rotate(12deg);filter:brightness(1.6)}}
+@keyframes hop{0%{transform:scale(1,1)}30%{transform:scale(1.18,.82)}60%{transform:scale(.9,1.12)}100%{transform:scale(1,1)}}
+@keyframes rise{from{opacity:0;transform:translateY(22px) scale(.96)}to{opacity:1;transform:none}}
+
+/* character juice: idle breathing + occasional life */
+.floaty{ animation: float 3s ease-in-out infinite, breathe 4.5s ease-in-out infinite; transform-origin:50% 80%; }
+
+/* staggered entrance for stacked cards = cinematic reveal */
+#app .pop-in{ animation: rise .5s var(--ease-out) both; }
+#app .space-y-3 > *, #app .grid > *{ animation: rise .5s var(--ease-out) both; }
+#app .grid > *:nth-child(2){animation-delay:.06s} #app .grid > *:nth-child(3){animation-delay:.12s}
+#app .grid > *:nth-child(4){animation-delay:.18s} #app .grid > *:nth-child(5){animation-delay:.24s}
+#app .grid > *:nth-child(6){animation-delay:.3s}
+
+/* buttons: anticipation + squash on press, glossy sheen sweep */
+.btn{ position:relative; overflow:hidden; }
+.btn::after{ content:""; position:absolute; inset:0; background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
+  background-size:200% 100%; animation: shimmer 5s linear infinite; opacity:.5; pointer-events:none; }
+.btn-primary:hover, .btn-sky:hover{ transform: translateY(-2px) scale(1.02); }
+
+/* world-map nodes: depth, glow halo, gentle bob */
+.world-node{ box-shadow: 0 22px 36px -16px rgba(40,30,80,.55); }
+.world-node::before{ content:""; position:absolute; inset:-30% ; background:radial-gradient(closest-side, rgba(255,255,255,.5), transparent);
+  opacity:.0; transition:opacity .3s; }
+.world-node:hover::before{ opacity:.6; }
+.world-node:not(.locked){ animation: float 5s ease-in-out infinite; }
+.world-node:nth-child(2n){ animation-delay:-2s; }
+
+/* view "camera" transitions */
+#app{ transition: opacity .18s ease, transform .18s ease; }
+#app.view-out{ opacity:0; transform: scale(.985) translateY(6px); }
+#app.view-in{ animation: rise .42s var(--ease-out); }
+
+/* game polish: snake hop + gem sparkle + apple bob */
+.board .tok.py.hop{ animation: hop .3s var(--spring); }
+.board .tok:not(.py){ animation: sparkle 2.2s ease-in-out infinite; }
+
+/* ── cinematic intro / title sequence ───────────────────────────────── */
+#fx-intro{ position:fixed; inset:0; z-index:100; display:grid; place-items:center;
+  background: radial-gradient(120% 120% at 50% 30%, #1e1b4b, #0b1026 70%); overflow:hidden;
+  transition: opacity .6s ease; }
+#fx-intro.out{ opacity:0; }
+.intro-stage{ text-align:center; position:relative; }
+.intro-glow{ position:absolute; left:50%; top:30%; width:60vmin; height:60vmin; transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side, rgba(124,237,170,.5), transparent); filter:blur(8px);
+  animation: breathe 3s ease-in-out infinite; }
+.intro-snake{ font-size:18vmin; filter: drop-shadow(0 10px 18px rgba(0,0,0,.5));
+  animation: introSnake 1s var(--spring) both, float 3s ease-in-out 1s infinite; }
+@keyframes introSnake{0%{transform:translateY(-60vh) scale(.4) rotate(-25deg);opacity:0}
+  70%{transform:translateY(8px) scale(1.12,.9);opacity:1}100%{transform:none}}
+.intro-title{ font-weight:800; font-size:13vmin; line-height:1; color:#fff; letter-spacing:.02em;
+  background:linear-gradient(180deg,#fff,#a5f3fc); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  filter: drop-shadow(0 6px 20px rgba(125,211,252,.45)); }
+.intro-title span{ display:inline-block; animation: introLetter .6s var(--spring) both; }
+.intro-title span{ animation-delay: calc(.5s + var(--i) * .07s); }
+@keyframes introLetter{0%{opacity:0;transform:translateY(40px) rotate(8deg) scale(.6)}100%{opacity:1;transform:none}}
+.intro-sub{ color:#c7d2fe; font-size:3.6vmin; margin-top:.4rem; opacity:0; animation: rise .8s ease 1.3s both; }
+.intro-skip{ color:#94a3b8; font-size:2.6vmin; margin-top:2.4rem; opacity:0; animation: pulse 1.6s ease 2.2s infinite, rise .6s ease 2.2s both; }
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001s !important; animation-iteration-count:1 !important; }
+}

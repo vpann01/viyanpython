@@ -9,12 +9,13 @@
 
   // ── boot ──────────────────────────────────────────────────────────────────
   async function boot() {
+    try { FX.start(); } catch {}
     state.curriculum = await API.curriculum();
     wireHud();
     if (API.token) {
       try { await refresh(); return showMap(); } catch { API.setToken(null); }
     }
-    showLogin();
+    try { FX.intro(() => showLogin()); } catch { showLogin(); }
   }
 
   async function refresh() {
@@ -318,6 +319,7 @@
   // ── celebration / rewards ───────────────────────────────────────────────────
   function celebrate(w, l, gainedXp, stars) {
     confettiBurst();
+    try { FX.fireworks(l.boss ? 7 : 4); } catch {}
     try { SnakeGame.say('Awesome! You earned a badge!'); } catch {}
     const r = l.reward || {};
     const learned = (l.game && l.game.concept) || (l.explain && l.explain[0]) || '';
